@@ -1,0 +1,6 @@
+aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 226972702386.    dkr.ecr.ap-northeast-1.amazonaws.com
+
+aws ecr get-login-password --region <region>       | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr                .amazonaws.com
+
+
+docker build -t 226972702386.dkr.ecr.ap-northeast-1.amazonaws.com/chigirh-app-trainning-liubang-repository 
