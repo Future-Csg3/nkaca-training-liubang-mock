@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
-import CodeEditorWindow from "./CodeEditorWindow";
+import CodeEditor from "../../../components/CodeEditor";
 
 import axios from "axios";
-import { languageOptions } from "../constants/languageOptions";
+import { languageOptions } from "../../../constants/languageOptions";
 
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { defineTheme } from "../lib/defineTheme";
-import useKeyPress from "../hooks/useKeyPress";
-import OutputWindow from "./OutputWindow";
-import OutputDetails from "./OutputDetails";
-import ThemeDropdown from "./ThemeDropdown";
-import LanguagesDropdown from "./LanguageDropdown";
+import LanguagesDropdown, { LanguagesDropdownOption } from "../../../components/LanguageDropdown";
+import OutputWindow from "../../../components/OutputWindow";
+import ThemeDropdown from "../../../components/ThemeDropdown";
+import useKeyPress from "../../../hooks/useKeyPress";
+import { defineTheme } from "../../../lib/defineTheme";
 
-import { chapterDefs } from "../constants/chapterDefs"
+import { chapterDefs } from "../../../constants/chapterDefs";
+
+import Box from '@mui/material/Box';
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
+
+import callChapterDetailGetApi from "../../../apis/chapter/ChapterDetailGetFunc";
 
 interface LandingProp {
     prop: {
@@ -29,27 +35,18 @@ interface ChapterDef {
 }
 
 const Landing: React.FC<LandingProp> = ({ prop }) => {
+
     const def: ChapterDef = chapterDefs[prop.id]
 
+    callChapterDetailGetApi("CHAPTER-AA-0003").then(function (response) {
+        def.mainExacute = response.data.chapter.main_code
+        def.initCode = response.data.chapter.example_code
+        def.expected = response.data.chapter.expected
+    }).catch((err) => {
+
+    });
+
     const [code, setCode] = useState(def.initCode);
-    const [customInput, setCustomInput] = useState("");
-    const [outputDetails, setOutputDetails] = useState(null);
-    const [processing, setProcessing] = useState(false);
-    const [theme, setTheme] = useState("cobalt");
-    const [language, setLanguage] = useState(languageOptions[0]);
-
-    const enterPress = useKeyPress("Enter");
-    const ctrlPress = useKeyPress("Control");
-
-    const onSelectChange = (sl: any) => {
-        setLanguage(sl);
-    };
-
-    useEffect(() => {
-        if (enterPress && ctrlPress) {
-            handleCompile();
-        }
-    }, [ctrlPress, enterPress]);
 
     const onChange = (action: string, data: any) => {
         switch (action) {
@@ -62,6 +59,56 @@ const Landing: React.FC<LandingProp> = ({ prop }) => {
             }
         }
     };
+
+    const [exercise, setExercise] = useState("## Title");
+
+    const [hasCompileError, setCompileError] = useState(true)
+    const [expected, setExpected] = useState("")
+
+    const handleCompileError = () => {
+        setCompileError(true)
+        showErrorToast(
+            "Cpmpleted Unsuccessfully!",
+            3000
+        );
+    }
+
+    const handleCompileSuccess = (expected: string) => {
+        setCompileError(false)
+        setExpected(expected)
+        showSuccessToast(`Compiled Successfully!`);
+    }
+
+    const [outputDetails, setOutputDetails] = useState(null);
+    const [processing, setProcessing] = useState(false);
+
+    const [saving, setSaving] = useState(false);
+
+    const [theme, setTheme] = useState("cobalt");
+    const [language, setLanguage] = useState(languageOptions[0]);
+
+    const handleLanguageChange = (langage: LanguagesDropdownOption) => {
+        setLanguage(langage);
+    };
+
+    function handleThemeChange(theme: string) {
+        if (["light", "vs-dark"].includes(theme)) {
+            setTheme(theme);
+        } else {
+            defineTheme(theme).then((_) => setTheme(theme));
+        }
+    }
+
+    const enterPress = useKeyPress("Enter");
+    const ctrlPress = useKeyPress("Control");
+
+    useEffect(() => {
+        if (enterPress && ctrlPress) {
+            handleCompile();
+        }
+    }, [ctrlPress, enterPress]);
+
+
 
     const handleCompile = () => {
 
@@ -77,7 +124,7 @@ const Landing: React.FC<LandingProp> = ({ prop }) => {
             language_id: language.id,
             // encode source code in base64
             source_code: btoa(unescape(encodeURIComponent(executeCode))),
-            stdin: btoa(customInput),
+            stdin: btoa(""),
         };
 
         const options = {
@@ -101,7 +148,6 @@ const Landing: React.FC<LandingProp> = ({ prop }) => {
                 checkStatus(token);
             })
             .catch((err) => {
-                let error = err.response ? err.response.data : err;
                 console.error(err);
                 // get error status
                 let status = err.response.status;
@@ -144,7 +190,7 @@ const Landing: React.FC<LandingProp> = ({ prop }) => {
                 setProcessing(false);
                 setOutputDetails(response.data);
 
-                if (atob(response.data.stdout) === def.expected) {
+                if (response.data.stdout === def.expected) {
                     showSuccessToast(`Compiled Successfully!`);
                 } else {
                     showErrorToast(
@@ -163,15 +209,6 @@ const Landing: React.FC<LandingProp> = ({ prop }) => {
             );
         }
     };
-
-    function handleThemeChange(theme: any) {
-
-        if (["light", "vs-dark"].includes(theme.value)) {
-            setTheme(theme.value);
-        } else {
-            defineTheme(theme.value).then((_) => setTheme(theme.value));
-        }
-    }
 
     useEffect(() => {
         defineTheme("oceanic-next").then((_) =>
@@ -216,42 +253,45 @@ const Landing: React.FC<LandingProp> = ({ prop }) => {
                 pauseOnHover
             />
 
-            <div className="flex flex-row">
-                <div className="px-4 py-2">
-                    <LanguagesDropdown props={{ onSelectChange: onSelectChange }} />
-                </div>
-                <div className="px-4 py-2">
-                    <ThemeDropdown props={{ handleThemeChange: handleThemeChange, theme: theme }} />
-                </div>
-            </div>
-            <div className="flex flex-row space-x-4 items-start px-4 py-4">
-                <div className="flex flex-col w-full h-full justify-start items-end">
-                    <CodeEditorWindow props={{
-                        code: code,
-                        onChange: onChange,
-                        language: language?.value,
-                        theme: theme
-                    }}
-                    />
-                </div>
+            <Box
+                sx={{
+                    width: "100%",
+                    height: "100%",
+                    flexGrow: 1,
+                }}
+            >
+                <Grid container spacing={2}>
+                    <Grid xs ><LanguagesDropdown props={{ handleLanguageChange: handleLanguageChange }} /></Grid>
+                    <Grid xs > <ThemeDropdown props={{ handleThemeChange: handleThemeChange, theme: theme }} /></Grid>
+                    <Grid xs={6} >    </Grid>
+                    <Grid xs={8} >
+                        <CodeEditor props={{
+                            code: code,
+                            onChange: onChange,
+                            language: language?.value,
+                            theme: theme,
+                            height: "85vh"
+                        }}
+                        />
+                    </Grid>
+                    <Grid xs={4} >
+                        <Stack spacing={2} >
+                            <OutputWindow props={{
+                                outputDetails: outputDetails,
+                            }} />
+                            <Button variant="contained" onClick={handleCompile} disabled={!code}>
+                                {processing ? "Processing..." : "Compile and Execute"}
+                            </Button>
 
-                <div className="right-container flex flex-shrink-0 w-[30%] flex-col">
-                    <OutputWindow prop={{ outputDetails: outputDetails }} />
-                    <div className="flex flex-col items-end">
-                        <button
-                            onClick={handleCompile}
-                            disabled={!code}
-                            className={
-                                "mt-4 border-2 border-black z-10 rounded-md shadow-[5px_5px_0px_0px_rgba(0,0,0)] px-4 py-2 hover:shadow transition duration-200 bg-white flex-shrink-0"
-                            }
-                        >
-                            {processing ? "Processing..." : "Compile and Execute"}
-                        </button>
-                    </div>
-                    {outputDetails && <OutputDetails prop={{ outputDetails: outputDetails }} />}
-                </div>
-            </div >
+                            <Button variant="contained" onClick={(e) => { }}>
+                                {saving ? "Saving..." : "Save"}
+                            </Button>
+                        </Stack>
+                    </Grid>
+                </Grid>
+            </Box>
         </>
     );
 };
+
 export default Landing;

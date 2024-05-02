@@ -1,9 +1,7 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
 
-import LoginForm from './components/AdminLoginForm';
+
+import AdminFrame from './components/AdminFrame';
 
 const AdminRoute: React.FC = () => {
 
@@ -11,8 +9,11 @@ const AdminRoute: React.FC = () => {
 
     if (masterKey == null) {
         document.location = "/admin/login";
+        return <></>
     }
-    return <><h1>Admin</h1></>
+    return (
+        <AdminFrame />
+    )
 }
 
 export default AdminRoute;

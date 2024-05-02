@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { useNavigate } from 'react-router-dom';
 
-import { Button, TextField, Typography, Alert } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { styled } from '@mui/system';
 
 import callAdminAuthApi from "../../../apis/auth/AdminAuthFunc";
@@ -24,6 +24,8 @@ const AdminLoginForm: React.FC = () => {
         }).catch((err) => {
             setIsError(true)
             // get error status
+            console.log(err);
+            
             const status = err.response.status;
             if (status === 401) {
                 setErrorMessage("Authentication failed.")
