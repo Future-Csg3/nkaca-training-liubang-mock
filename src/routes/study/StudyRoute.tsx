@@ -1,9 +1,9 @@
-import ListFrame from "../../components/ListFrame";
+import StudyFrame from "./components/StudyFrame";
 
 const StudyRoute: React.FC = () => {
     return (
         <>
-            <ListFrame />
+            <StudyFrame />
         </>
     );
 }

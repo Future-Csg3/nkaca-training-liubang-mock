@@ -1,54 +1,72 @@
 import React from "react";
 
-interface OutputWindowProp {
-    prop: {
+import { styled } from '@mui/material/styles';
+
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
+interface OutputWindowProps {
+    props: {
         outputDetails: any
     }
 }
 
-const OutputWindow: React.FC<OutputWindowProp> = ({ prop }) => {
+const OutputWindow: React.FC<OutputWindowProps> = ({ props }) => {
     const getOutput = () => {
-        let statusId = prop.outputDetails?.status?.id;
+        let statusId = props.outputDetails?.status?.id;
 
         if (statusId === 6) {
-            // compilation error
+            // Compile error
             return (
-                <pre className="px-2 py-1 font-normal text-xs text-red-500">
-                    {atob(prop.outputDetails?.compile_output)}
-                </pre>
+                <Typography variant="subtitle2" gutterBottom color="red">
+                    {atob(props.outputDetails?.compile_output)}
+                </Typography>
             );
         } else if (statusId === 3) {
             return (
-                <pre className="px-2 py-1 font-normal text-xs text-green-500">
-                    {atob(prop.outputDetails.stdout) !== null
-                        ? `${atob(prop.outputDetails.stdout)}`
+                <Typography variant="subtitle2" gutterBottom color="green">
+                    {atob(props.outputDetails.stdout) !== null
+                        ? `${atob(props.outputDetails.stdout)}`
                         : null}
-                </pre>
+                </Typography>
             );
         } else if (statusId === 5) {
             return (
-                <pre className="px-2 py-1 font-normal text-xs text-red-500">
+                <Typography variant="subtitle2" gutterBottom color="red">
                     {`Time Limit Exceeded`}
-                </pre>
+                </Typography>
             );
         } else {
             return (
-                <pre className="px-2 py-1 font-normal text-xs text-red-500">
-                    {atob(prop.outputDetails?.stderr)}
-                </pre>
+                <Typography variant="subtitle2" gutterBottom color="red">
+                    {atob(props.outputDetails?.stderr)}
+                </Typography>
             );
         }
     };
     return (
         <>
-            <h1 className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 mb-2">
-                Result
-            </h1>
-            <div className="w-full h-56 bg-[#1e293b] rounded-md text-white font-normal text-sm overflow-y-auto">
-                {prop.outputDetails ? <>{getOutput()}</> : null}
-            </div>
+            <Box sx={{ width: '100%', whiteSpace: "pre-wrap" }}>
+                <Typography variant="h5" gutterBottom>
+                    Result
+                </Typography>
+                <Window style={{ overflow: "auto" }}>
+                    {props.outputDetails ? <>{getOutput()}</> : null}
+                </Window>
+            </Box>
         </>
     );
 };
+
+const Window = styled("div")(({ theme }) => ({
+    ...theme.typography.body2,
+    padding: theme.spacing(2),
+    backgroundColor: "#1e293b",
+    textAlign: 'left',
+    color: theme.palette.text.secondary,
+    height: 300,
+    borderRadius: "7px",
+    lineHeight: '60px',
+}));
 
 export default OutputWindow;
