@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -16,6 +16,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { Routes, Route, Link } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { styled, useTheme } from '@mui/material/styles';
@@ -23,7 +24,24 @@ import { styled, useTheme } from '@mui/material/styles';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Outlet } from "react-router-dom";
 
+import { callThemeGetApi } from '../../../apis/theme/ThemeApi';
 
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+
+export interface StudyFrameProps {
+    props: {
+        handleChapterSelected: any
+    }
+}
+
+interface Archivement {
+    achievementId: string;
+    chapterId: string;
+    order: number;
+    status: string;
+}
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -31,9 +49,10 @@ interface TabPanelProps {
     value: number;
 }
 
-const StudyFrame: React.FC = () => {
+const StudyFrame: React.FC<StudyFrameProps> = ({ props }) => {
+
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -42,6 +61,29 @@ const StudyFrame: React.FC = () => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [archivements, setArchivements] = useState(new Array<Archivement>())
+
+    if (!archivements.length) {
+        callThemeGetApi().then(function (response: any) {
+            const res = response.data.theme
+            setTitle(res.theme)
+            setDescription(res.description)
+            setArchivements(res.archivements.map((e: any) => {
+                return {
+                    achievementId: e.achievement_id,
+                    chapterId: e.chapter_id,
+                    order: e.order,
+                    status: e.status,
+                }
+            }))
+
+        }).catch((err: any) => {
+            console.error(err)
+        });
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -58,7 +100,7 @@ const StudyFrame: React.FC = () => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        Study
+                        {title}
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -83,36 +125,34 @@ const StudyFrame: React.FC = () => {
                 <Divider />
                 <List>
                     <ListItem key="summary" disablePadding>
-                        <ListItemButton href='/study/summary'>
-                            <ListItemIcon>
-                                <AssignmentIcon fontSize='large' />
-                            </ListItemIcon>
-                            <ListItemText primary="Summary" />
-                        </ListItemButton>
-                    </ListItem>
-
-                    {/* {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
+                        <Link to={`/study/summary`}>
                             <ListItemButton>
                                 <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                    <AssignmentIcon fontSize='large' />
                                 </ListItemIcon>
-                                <ListItemText primary={text} />
+                                <ListItemText primary="Summary" />
                             </ListItemButton>
-                        </ListItem>
-                    ))} */}
+                        </Link>
+                    </ListItem>
                 </List>
                 <Divider />
                 <List>
-                    {['All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam', 'All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key="CHAPTER-XX-001" disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary="CHAPTER-XX-001" />
-                            </ListItemButton>
-                        </ListItem>
+                    {archivements.map((e, index) => (
+                        <Link key={index} to={`/study/chapter?chaptrId=${e.chapterId}`}>
+                            <ListItem disablePadding>
+                                <ListItemButton onClick={
+                                    () => props.handleChapterSelected({ chapterId: e.chapterId, archiveId: e.achievementId })
+                                }>
+                                    <ListItemIcon>
+                                        {e.status === "1" ? <PendingActionsIcon fontSize="large" color="primary" /> :
+                                            e.status === "2" ? <DoneOutlineIcon fontSize="large" color="success" /> :
+                                                <ContentPasteIcon fontSize="large" color="action" />
+                                        }
+                                    </ListItemIcon>
+                                    <ListItemText primary={`CHAPTER-${index + 1}`} />
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
                     ))}
                 </List>
             </Drawer>
@@ -144,7 +184,7 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-const drawerWidth = 500;
+const drawerWidth = 250;
 
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{

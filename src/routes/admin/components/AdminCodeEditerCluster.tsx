@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import CodeEditor from "../../../components/CodeEditor";
 
-import { styled } from '@mui/material/styles';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 
-import Typography from '@mui/material/Typography';
 
 import ChapterCreateForm from "./ChapterCreateForm";
 
@@ -136,7 +134,7 @@ function TabPanel(props: TabPanelProps) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>

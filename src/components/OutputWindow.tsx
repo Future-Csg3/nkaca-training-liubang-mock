@@ -5,41 +5,32 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+
 interface OutputWindowProps {
     props: {
-        outputDetails: any
+        outputDetails: OutputDetails | null
     }
+}
+
+export interface OutputDetails {
+    result: string,
+    isCompileError: boolean,
+    isUnsuccess: boolean
+
 }
 
 const OutputWindow: React.FC<OutputWindowProps> = ({ props }) => {
     const getOutput = () => {
-        let statusId = props.outputDetails?.status?.id;
-
-        if (statusId === 6) {
-            // Compile error
+        if (props.outputDetails!.isCompileError || props.outputDetails!.isUnsuccess) {
             return (
                 <Typography variant="subtitle2" gutterBottom color="red">
-                    {atob(props.outputDetails?.compile_output)}
-                </Typography>
-            );
-        } else if (statusId === 3) {
-            return (
-                <Typography variant="subtitle2" gutterBottom color="green">
-                    {atob(props.outputDetails.stdout) !== null
-                        ? `${atob(props.outputDetails.stdout)}`
-                        : null}
-                </Typography>
-            );
-        } else if (statusId === 5) {
-            return (
-                <Typography variant="subtitle2" gutterBottom color="red">
-                    {`Time Limit Exceeded`}
+                    {props.outputDetails?.result}
                 </Typography>
             );
         } else {
             return (
-                <Typography variant="subtitle2" gutterBottom color="red">
-                    {atob(props.outputDetails?.stderr)}
+                <Typography variant="subtitle2" gutterBottom color="green">
+                    {props.outputDetails?.result}
                 </Typography>
             );
         }

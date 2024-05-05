@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import LanguagesDropdown, { LanguagesDropdownOption } from "../../../components/LanguageDropdown";
-import OutputWindow from "../../../components/OutputWindow";
+import OutputWindow, { OutputDetails } from "../../../components/OutputWindow";
 import ThemeDropdown from "../../../components/ThemeDropdown";
 import useKeyPress from "../../../hooks/useKeyPress";
 import { defineTheme } from "../../../lib/defineTheme";
@@ -21,7 +21,7 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 import { chapterDefs } from "../../../constants/chapterDefs";
 
-import callChapterPostApi from "../../../apis/chapter/ChapterPostFunc";
+import { callChapterPostApi } from "../../../apis/chapter/ChapterApi";
 
 
 interface ChapterDef {
@@ -82,9 +82,9 @@ const ChapterCreate: React.FC = () => {
         showSuccessToast(`Compiled Successfully!`);
     }
 
-    const [outputDetails, setOutputDetails] = useState(null);
+    const [outputDetails, setOutputDetails] = useState<OutputDetails | null>(null);
     const [processing, setProcessing] = useState(false);
-    
+
     const [saving, setSaving] = useState(false);
 
     const [theme, setTheme] = useState("cobalt");
@@ -186,15 +186,39 @@ const ChapterCreate: React.FC = () => {
                     checkStatus(token);
                 }, 2000);
                 return;
-            } else if (statusId === 3) {
+            }
+            if (statusId === 3) {
                 setProcessing(false);
-                setOutputDetails(response.data);
+                setOutputDetails({
+                    result: atob(response.data.stdout),
+                    isCompileError: false,
+                    isUnsuccess: false,
+                });
                 handleCompileSuccess(response.data.stdout)
+            } else if (statusId === 5) {
+                setProcessing(false);
+                setOutputDetails({
+                    result: "Time Limit Exceeded",
+                    isCompileError: true,
+                    isUnsuccess: false,
+                });
+                handleCompileError()
+            } else if (statusId === 6) {
+                setProcessing(false);
+                setOutputDetails({
+                    result: atob(response.data.compile_output),
+                    isCompileError: true,
+                    isUnsuccess: false,
+                });
+                handleCompileError()
             } else {
                 setProcessing(false);
-                setOutputDetails(response.data);
+                setOutputDetails({
+                    result: atob(response.data.stderr),
+                    isCompileError: true,
+                    isUnsuccess: false,
+                });
                 handleCompileError()
-
             }
 
             return;

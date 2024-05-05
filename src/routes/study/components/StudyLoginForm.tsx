@@ -5,12 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { Button, TextField } from '@mui/material';
 import { styled } from '@mui/system';
 
-import callAdminAuthApi from "../../../apis/auth/AdminAuthFunc";
+import { callUserGetApi } from "../../../apis/user/UserApi";
 
-const AdminLoginForm: React.FC = () => {
+const StudyLoginForm: React.FC = () => {
 
     const [userId, setUserId] = useState("");
-    const [password, setPassword] = useState("");
 
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -18,15 +17,17 @@ const AdminLoginForm: React.FC = () => {
     const navigate = useNavigate();
 
     function handleLogin() {
-        callAdminAuthApi(userId, password).then(function (response) {
-            sessionStorage.setItem('x-master-key', response.data.master_key);
-            navigate('/admin')
+        callUserGetApi(userId).then(function (response) {
+            sessionStorage.setItem('x-session-key', response.data.user.session_key);
+            navigate('/study')
         }).catch((err) => {
             setIsError(true)
             // get error status
+            console.log(err);
+
             const status = err.response.status;
-            if (status === 401) {
-                setErrorMessage("Authentication failed.")
+            if (status === 404) {
+                setErrorMessage("User not found.")
                 return
             }
             setErrorMessage("Api error.")
@@ -37,18 +38,14 @@ const AdminLoginForm: React.FC = () => {
         <>
             <Container>
                 <LoginCard>
-                    <TextField error={isError} variant="standard" margin="normal" fullWidth label="user id" onChange={(e) => { setUserId(e.target.value) }} />
                     <TextField
                         error={isError}
                         variant="standard"
                         margin="normal"
-                        fullWidth
-                        label="password"
-                        type="password"
+                        fullWidth label="user id"
                         helperText={errorMessage}
-                        onChange={(e) => { setPassword(e.target.value) }}
+                        onChange={(e) => { setUserId(e.target.value) }}
                     />
-
                     <Button variant="contained" color="primary" fullWidth onClick={handleLogin}>
                         Login
                     </Button>
@@ -74,4 +71,4 @@ const LoginCard = styled('div')({
     boxShadow: '0 0 10px rgba(0,0,0,0.1)',
 });
 
-export default AdminLoginForm;
+export default StudyLoginForm;

@@ -1,11 +1,9 @@
 import 'easymde/dist/easymde.min.css';
-import { useState } from "react";
 import SimpleMDE from 'react-simplemde-editor';
 
 import DOMPurify from "dompurify";
 import "easymde/dist/easymde.min.css";
 import { marked } from "marked";
-import src from 'react-select/dist/declarations/src';
 
 
 interface ChapterCreateFormProp {
