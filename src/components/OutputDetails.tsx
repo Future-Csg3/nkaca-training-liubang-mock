@@ -31,4 +31,4 @@ const OutputDetails: React.FC<OutputDetailsProp> = ({ prop }) => {
     );
 };
 
-export default OutputDetails;
+// export default OutputDetails;

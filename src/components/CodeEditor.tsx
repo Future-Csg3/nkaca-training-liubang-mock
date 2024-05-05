@@ -17,7 +17,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ props }) => {
     const [value, setValue] = useState(props.code || "");
 
     const handleEditorChange = (value: any) => {
-        setValue(value);
         props.onChange(props.codeType || "code", value);
     };
 
@@ -27,7 +26,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ props }) => {
             height={props.height || "85vh"}
             width={`100%`}
             language={props.language || "javascript"}
-            value={value}
+            value={props.code}
             theme={props.theme}
             defaultValue="// some comment"
             onChange={handleEditorChange}

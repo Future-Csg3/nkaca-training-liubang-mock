@@ -32,12 +32,11 @@ const ThemeDropdown: React.FC<ThemeDropdownProps> = ({ props }) => {
         key: themeId,
     }))
 
-    const defaultTheme = themes.find((option) => option.value === props.theme)
+    const defaultTheme = themes.find((option) => option.value === "cobalt")
 
     const onChange = (e: any) => {
         props.handleThemeChange(e.target.value)
     }
-
 
     return (
         <Box sx={{ minWidth: 120 }}>

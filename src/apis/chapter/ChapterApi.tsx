@@ -1,6 +1,25 @@
 import axios from "axios";
 
-function callChapterPostApi(
+export function callChapterGetApi(chapterId: string) {
+    const sessionKey = sessionStorage.getItem('x-session-key');
+
+    const endpoint = `${process.env.REACT_APP_BACKEND_HOST}/chapter/${chapterId}`
+
+    const req = {
+        method: "GET",
+        url: endpoint,
+        headers: {
+            "content-type": "application/json",
+            "Content-Type": "application/json",
+            "x-session-key": sessionKey
+        },
+    };
+
+    return axios.request(req)
+
+}
+
+export function callChapterPostApi(
     chapterId: string,
     mainCode: string,
     exampleCode: string,
@@ -9,6 +28,10 @@ function callChapterPostApi(
     level: number,
     exercise: string,
 ) {
+    const masterKey = sessionStorage.getItem('x-master-key');
+
+    const endpoint = `${process.env.REACT_APP_BACKEND_HOST}/chapter`
+
     const body = {
         chapter: {
             chapter_id: chapterId,
@@ -20,10 +43,6 @@ function callChapterPostApi(
             exercise: exercise,
         }
     };
-
-    const masterKey = sessionStorage.getItem('x-master-key');
-
-    const endpoint = `${process.env.REACT_APP_BACKEND_HOST}/chapter`
 
     const req = {
         method: "POST",
@@ -39,5 +58,3 @@ function callChapterPostApi(
     return axios.request(req)
 
 }
-
-export default callChapterPostApi
