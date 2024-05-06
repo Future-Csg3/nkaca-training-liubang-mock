@@ -71,7 +71,7 @@ const StudyFrame: React.FC<StudyFrameProps> = ({ props }) => {
             const res = response.data.theme
             setTitle(res.theme)
             setDescription(res.description)
-            setArchivements(res.archivements.map((e: any) => {
+            setArchivements(response.data.archivements.map((e: any) => {
                 return {
                     achievementId: e.achievement_id,
                     chapterId: e.chapter_id,
