@@ -81,6 +81,22 @@ const AdminFrame: React.FC = () => {
                             <ListItemText primary="Chapter登録" />
                         </ListItemButton>
                     </ListItem>
+                    <ListItem key="theme regist" disablePadding>
+                        <ListItemButton href='/admin/theme-create'>
+                            <ListItemIcon>
+                                <AssignmentIcon fontSize='large' />
+                            </ListItemIcon>
+                            <ListItemText primary="Theme登録" />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem key="theme setting" disablePadding>
+                        <ListItemButton href='/admin/theme-setting'>
+                            <ListItemIcon>
+                                <AssignmentIcon fontSize='large' />
+                            </ListItemIcon>
+                            <ListItemText primary="Theme設定" />
+                        </ListItemButton>
+                    </ListItem>
 
                     {/* {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                         <ListItem key={text} disablePadding>
