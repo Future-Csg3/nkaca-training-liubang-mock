@@ -58,3 +58,41 @@ export function callChapterPostApi(
     return axios.request(req)
 
 }
+
+export function callChapterAllGetApi() {
+    const masterKey = sessionStorage.getItem('x-master-key');
+
+    const endpoint = `${process.env.REACT_APP_BACKEND_HOST}/chapter/all`
+
+    const req = {
+        method: "GET",
+        url: endpoint,
+        headers: {
+            "content-type": "application/json",
+            "Content-Type": "application/json",
+            "x-master-key": masterKey
+        },
+    };
+
+    return axios.request(req)
+
+}
+
+export function callChapterListGetApi(themId: string) {
+    const masterKey = sessionStorage.getItem('x-master-key');
+
+    const endpoint = `${process.env.REACT_APP_BACKEND_HOST}/chapter/list/${themId}`
+
+    const req = {
+        method: "GET",
+        url: endpoint,
+        headers: {
+            "content-type": "application/json",
+            "Content-Type": "application/json",
+            "x-master-key": masterKey
+        },
+    };
+
+    return axios.request(req)
+
+}
