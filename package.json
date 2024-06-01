@@ -1,4 +1,5 @@
 {
+  "homepage": "https://Future-Csg3.github.io/nkaca-training-liubang-mock/",
   "name": "chigirh-app-trainning-liubang",
   "version": "0.1.0",
   "private": true,
@@ -38,7 +39,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "del": "del -rf docs",
+    "move": "move build docs",
+    "deploy": "npm run del && npm run build && npm run move"
   },
   "eslintConfig": {
     "extends": [
