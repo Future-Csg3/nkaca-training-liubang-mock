@@ -6,13 +6,14 @@ import ExampleCounter from './components/ExampleCounter';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
+const URL = process.env.PUBLIC_URL;
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route path="/" Component={App}>
           <Route index element={<></>} />
