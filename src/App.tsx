@@ -23,6 +23,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Outlet } from "react-router-dom";
 
+const APP_NAME: String = "nkaca-training-liubang-mock";
+
 const App: React.FC = () => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -75,7 +77,7 @@ const App: React.FC = () => {
         <Divider />
         <List>
           <ListItem key="home" disablePadding>
-            <ListItemButton href='/'>
+            <ListItemButton href={'/' + APP_NAME}>
               <ListItemIcon>
                 <AssignmentIcon fontSize='large' />
               </ListItemIcon>
@@ -86,7 +88,7 @@ const App: React.FC = () => {
         <Divider />
         <List>
           <ListItem key="home" disablePadding>
-            <ListItemButton href='/example1'>
+            <ListItemButton href={'/' + APP_NAME + '/example1'}>
               <ListItemIcon>
                 <AssignmentIcon fontSize='large' />
               </ListItemIcon>
