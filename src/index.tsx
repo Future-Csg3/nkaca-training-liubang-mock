@@ -13,11 +13,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" Component={App}>
+        <Route path={"/" + URL} Component={App}>
           <Route index element={<></>} />
-          <Route path="example1" Component={ExampleCounter} />
+          <Route path={URL + "example1"} Component={ExampleCounter} />
         </Route>
       </Routes>
     </BrowserRouter>
