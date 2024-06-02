@@ -1,5 +1,5 @@
 {
-  "homepage": "https://future-csg3.github.io/nkaca-training-liubang-mock/",
+  "homepage": "https://future-csg3.github.io/nkaca-training-liubang-mock",
   "name": "nkaca-training-liubang-mock",
   "version": "0.1.0",
   "private": true,
@@ -38,11 +38,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "cp build/index.html build/404.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "del": "del -rf docs",
+    "del": "rm -rf docs",
     "move": "move build docs",
-    "deploy": "npm run del && npm run build && npm run move"
+    "deploy": "npm run del && npm run build &&npm run postbuild && npm run move"
   },
   "eslintConfig": {
     "extends": [
