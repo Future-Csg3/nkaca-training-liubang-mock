@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/nkaca-training-liubang-mock/static/css/main.92c8d4eb.css",
-    "main.js": "/nkaca-training-liubang-mock/static/js/main.c05a4c95.js",
+    "main.js": "/nkaca-training-liubang-mock/static/js/main.9beff44a.js",
     "static/js/453.c5f30212.chunk.js": "/nkaca-training-liubang-mock/static/js/453.c5f30212.chunk.js",
     "index.html": "/nkaca-training-liubang-mock/index.html",
     "main.92c8d4eb.css.map": "/nkaca-training-liubang-mock/static/css/main.92c8d4eb.css.map",
-    "main.c05a4c95.js.map": "/nkaca-training-liubang-mock/static/js/main.c05a4c95.js.map",
+    "main.9beff44a.js.map": "/nkaca-training-liubang-mock/static/js/main.9beff44a.js.map",
     "453.c5f30212.chunk.js.map": "/nkaca-training-liubang-mock/static/js/453.c5f30212.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.92c8d4eb.css",
-    "static/js/main.c05a4c95.js"
+    "static/js/main.9beff44a.js"
   ]
 }

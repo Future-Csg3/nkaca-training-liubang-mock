@@ -7,6 +7,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 const URL = process.env.PUBLIC_URL;
+const APP_NAME = "nkaca-training-liubang-mock";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,9 +16,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path={"/" + URL} Component={App}>
+        <Route path={"/" + APP_NAME} Component={App}>
           <Route index element={<></>} />
-          <Route path={URL + "example1"} Component={ExampleCounter} />
+          <Route path={"/" + APP_NAME + "/example1"} Component={ExampleCounter} />
         </Route>
       </Routes>
     </BrowserRouter>
