@@ -95,6 +95,14 @@ const App: React.FC = () => {
               <ListItemText primary="Example Counter" />
             </ListItemButton>
           </ListItem>
+          <ListItem key="home" disablePadding>
+            <ListItemButton href={'/' + APP_NAME + '/markdown'}>
+              <ListItemIcon>
+                <AssignmentIcon fontSize='large' />
+              </ListItemIcon>
+              <ListItemText primary="MarkDownWriter" />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
       <Main open={open}>

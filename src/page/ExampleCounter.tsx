@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 
-import { Button, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 
-import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 const ExampleCounter: React.FC = () => {
     const [count, setCount] = useState(0);
@@ -13,8 +11,6 @@ const ExampleCounter: React.FC = () => {
     const increment = () => {
         setCount(count + 1)
     };
-
-
 
     return (
         <Container>

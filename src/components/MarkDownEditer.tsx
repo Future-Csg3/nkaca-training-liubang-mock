@@ -2,9 +2,9 @@ import 'easymde/dist/easymde.min.css';
 import SimpleMDE from 'react-simplemde-editor';
 
 import DOMPurify from "dompurify";
-import "easymde/dist/easymde.min.css";
 import { marked } from "marked";
 
+import "easymde/dist/easymde.min.css";
 
 interface ChapterCreateFormProp {
     props: {
@@ -15,33 +15,22 @@ interface ChapterCreateFormProp {
 
 const MarkDownEditor: React.FC<ChapterCreateFormProp> = ({ props }) => {
 
-    const render = (markdown: string): any => {
-        return marked(markdown)
-    }
-
     const onChange = (e: string) => {
         props.handleMarkDownChange(e)
     }
 
+    const render = (raw: string): any => {
+        return marked(raw)
+    }
+
     return (
         <>
-            <SimpleMDE value={props.markdown} onChange={onChange} />
-            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(render(props.markdown)) }}></div>
+            <SimpleMDE value={props.markdown} onChange={onChange} options={{ toolbar: toolbar, autofocus: true, previewRender: render }} />
         </>
     )
 }
 
 const toolbar: any = [
-    {
-        name: "save",
-        action: function customFunction(editor: any) {
-            alert(editor.value())
-            // save action
-        },
-        className: "fa fa-save",
-        title: "Save"
-    },
-    '|',
     'bold',
     'italic',
     'heading',
@@ -53,10 +42,7 @@ const toolbar: any = [
     'link',
     'image',
     '|',
-    'undo',
-    'redo',
-    '|',
-    'guide',
+    'preview',
 ]
 
 export default MarkDownEditor;
