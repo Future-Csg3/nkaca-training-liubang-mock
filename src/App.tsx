@@ -37,6 +37,8 @@ const App: React.FC = () => {
     setOpen(false);
   };
 
+  console.log("app")
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -101,6 +103,22 @@ const App: React.FC = () => {
                 <AssignmentIcon fontSize='large' />
               </ListItemIcon>
               <ListItemText primary="MarkDownWriter" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key="home" disablePadding>
+            <ListItemButton href={'/' + APP_NAME + '/form1'}>
+              <ListItemIcon>
+                <AssignmentIcon fontSize='large' />
+              </ListItemIcon>
+              <ListItemText primary="Form1" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key="home" disablePadding>
+            <ListItemButton href={'/' + APP_NAME + '/form2'}>
+              <ListItemIcon>
+                <AssignmentIcon fontSize='large' />
+              </ListItemIcon>
+              <ListItemText primary="Form2" />
             </ListItemButton>
           </ListItem>
         </List>

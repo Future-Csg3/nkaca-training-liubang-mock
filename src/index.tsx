@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
 import ExampleCounter from './page/ExampleCounter';
 import ExampleMarkDown from './page/ExampleMarkDown';
+import ExampleForm1 from './page/ExampleForm1';
+import ExampleForm2 from './page/ExampleForm2';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -21,6 +23,9 @@ root.render(
           <Route index element={<></>} />
           <Route path={"/" + APP_NAME + "/example1"} Component={ExampleCounter} />
           <Route path={"/" + APP_NAME + "/markdown"} Component={ExampleMarkDown} />
+          <Route path={"/" + APP_NAME + "/form1"} Component={ExampleForm1} />
+          <Route path={"/" + APP_NAME + "/form2"} Component={ExampleForm2} />
+          <Route path={"/" + APP_NAME + "/form2/:operation"} Component={ExampleForm2} />
         </Route>
       </Routes>
     </BrowserRouter>
