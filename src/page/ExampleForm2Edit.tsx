@@ -18,10 +18,19 @@ import Typography from "@mui/material/Typography";
 import MarkDownEditorPlain from "../components/MarkDownEditerPlain";
 import MarkDownViewer from "../components/MarkDownViewer";
 
-const ExampleForm2: React.FC = () => {
+const ExampleForm2Edit: React.FC = () => {
   const [lastName, setLastName] = useState("");
   const [fisrtName, setFirstName] = useState("");
   const [markdown, setMarkdown] = useState("");
+
+  const onLastNameChange = (e: any) => {
+    console.log("onLastNameChange");
+    setLastName(e.target.value);
+  };
+
+  const onFirstNameChange = (e: any) => {
+    setFirstName(e.target.value);
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -39,6 +48,9 @@ const ExampleForm2: React.FC = () => {
     };
     init();
   }, []);
+
+  const urlParams = useParams<{ operation: string }>();
+  let isEdit = true;
 
   const pathname = useLocation().pathname;
   const navigate = useNavigate();
@@ -62,28 +74,69 @@ const ExampleForm2: React.FC = () => {
       <Box sx={{ minWidth: 120 }}>
         <Stack spacing={5}>
           <Stack direction="row" spacing={5}>
-            <>
-              <Typography variant="body1" gutterBottom>
-                {lastName}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {fisrtName}
-              </Typography>
-            </>
+            {isEdit ? (
+              <>
+                {" "}
+                <FormControl>
+                  <TextField
+                    type="text"
+                    label="last name"
+                    required
+                    value={lastName}
+                    onChange={onLastNameChange}
+                  />
+                </FormControl>
+                <FormControl>
+                  <TextField
+                    type="text"
+                    label="fisrt name"
+                    required
+                    value={fisrtName}
+                    onChange={onFirstNameChange}
+                  />
+                </FormControl>
+              </>
+            ) : (
+              <>
+                <Typography variant="body1" gutterBottom>
+                  {lastName}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  {fisrtName}
+                </Typography>
+              </>
+            )}
           </Stack>
-
-          <MarkDownViewer props={{ raw: markdown }} />
-
+          {isEdit ? (
+            <MarkDownEditorPlain
+              props={{ markdown: markdown, handleMarkDownChange: setMarkdown }}
+            />
+          ) : (
+            <MarkDownViewer props={{ raw: markdown }} />
+          )}
           <Box sx={{ "& > :not(style)": { m: 1 } }}>
-            <Fab
-              color="secondary"
-              aria-label="edit"
-              onClick={() => {
-                handleEdit();
-              }}
-            >
-              <EditIcon />
-            </Fab>
+            {isEdit ? (
+              <Fab
+                variant="extended"
+                color="primary"
+                onClick={() => {
+                  handleSave();
+                }}
+              >
+                <NavigationIcon sx={{ mr: 1 }} />
+                Save
+              </Fab>
+            ) : (
+              <Fab
+                color="secondary"
+                aria-label="edit"
+                onClick={() => {
+                  handleEdit();
+                }}
+              >
+                <EditIcon />
+              </Fab>
+            )}
           </Box>
         </Stack>
       </Box>
@@ -100,4 +153,4 @@ const Container = styled("div")({
   backgroundColor: "#f0f0f0",
 });
 
-export default ExampleForm2;
+export default ExampleForm2Edit;
